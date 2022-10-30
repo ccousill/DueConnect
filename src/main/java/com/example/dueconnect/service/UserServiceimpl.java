@@ -32,7 +32,23 @@ public class UserServiceimpl implements UserService{
         List<User> userEntities = userRepo.findAll();
         List<User> users = userEntities.stream().map(user -> new User(user.getId(),user.getFirstName(),user.getLastName(),user.getEmail())).collect(Collectors.toList());
             return users;
-//        return userRepo.findAll();
+    }
+
+    @Override
+    public boolean deleteUser(long userId) {
+        User user = userRepo.findById(userId).get();
+        userRepo.delete(user);
+        return true;
+    }
+
+    @Override
+    public User updateUser(long userId, User user) {
+        User userEntity = userRepo.findById(userId).get();
+        userEntity.setEmail(user.getEmail());
+        userEntity.setFirstName(user.getFirstName());
+        userEntity.setLastName(user.getLastName());
+        userRepo.save(userEntity);
+        return user;
     }
 
 }
